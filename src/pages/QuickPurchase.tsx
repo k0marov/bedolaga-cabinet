@@ -30,7 +30,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 import { cn } from '../lib/utils';
 import { getApiErrorMessage } from '../utils/api-error';
 import { formatPrice } from '../utils/format';
-import { setFavicon, letterFaviconDataUri, roundedFaviconDataUri } from '../utils/favicon';
+import { setFavicon, roundedFaviconDataUri } from '../utils/favicon';
 import { useCurrency } from '../hooks/useCurrency';
 
 function detectContactType(value: string): 'email' | 'telegram' {
@@ -805,10 +805,6 @@ export default function QuickPurchase() {
   useEffect(() => {
     if (!branding) return;
     const logoUrl = (branding.has_custom_logo ? getLogoBlobUrl() : null) || '/chayka-logo.svg';
-    if (!logoUrl) {
-      setFavicon(letterFaviconDataUri(branding.logo_letter));
-      return;
-    }
     let cancelled = false;
     // Round the custom logo like the header tile instead of a hard square.
     roundedFaviconDataUri(logoUrl).then((rounded) => {

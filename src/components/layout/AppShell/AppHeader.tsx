@@ -18,7 +18,7 @@ import {
 } from '@/api/branding';
 import { themeColorsApi } from '@/api/themeColors';
 import { cn } from '@/lib/utils';
-import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TicketNotificationBell from '@/components/TicketNotificationBell';
@@ -46,7 +46,6 @@ import {
 } from './icons';
 
 const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || BRAND_NAME;
-const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
 
 import type { TelegramPlatform } from '@/hooks/useTelegramSDK';
 
@@ -108,7 +107,6 @@ export function AppHeader({
   });
 
   const appName = branding ? branding.name : FALLBACK_NAME;
-  const logoLetter = branding?.logo_letter || FALLBACK_LOGO;
   const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
   const hasCustomLogo = Boolean(logoUrl);
 
@@ -196,14 +194,6 @@ export function AppHeader({
               className={cn('flex flex-shrink-0 items-center gap-2.5', !appName && 'mr-4')}
             >
               <div className="relative flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-linear-lg border border-dark-700/50 bg-dark-800/80 shadow-md">
-                <span
-                  className={cn(
-                    'absolute text-lg font-bold text-accent-400 transition-opacity duration-200',
-                    hasCustomLogo && logoLoaded ? 'opacity-0' : 'opacity-100',
-                  )}
-                >
-                  {logoLetter}
-                </span>
                 {hasCustomLogo && logoUrl && (
                   <img
                     src={logoUrl}

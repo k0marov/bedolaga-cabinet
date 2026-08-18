@@ -57,7 +57,7 @@ export function AppShell({ children }: AppShellProps) {
   const { toggleTheme, isDark } = useTheme();
 
   // Extracted hooks
-  const { appName, logoLetter, hasCustomLogo, logoUrl } = useBranding();
+  const { appName, hasCustomLogo, logoUrl } = useBranding();
   const { referralEnabled, wheelEnabled, hasContests, hasPolls, giftEnabled } = useFeatureFlags();
   useScrollRestoration();
   // Анимированный фон рендерит BackgroundHost в App (не перемонтируется при
@@ -207,14 +207,6 @@ export function AppShell({ children }: AppShellProps) {
             onClick={handleNavClick}
           >
             <div className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center overflow-hidden rounded-lg bg-dark-800">
-              <span
-                className={cn(
-                  'absolute text-sm font-bold text-accent-400 transition-opacity duration-200',
-                  hasCustomLogo && isLogoPreloaded() ? 'opacity-0' : 'opacity-100',
-                )}
-              >
-                {logoLetter}
-              </span>
               {hasCustomLogo && logoUrl && (
                 <img
                   src={logoUrl}

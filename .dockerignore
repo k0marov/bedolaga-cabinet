@@ -29,6 +29,7 @@ coverage
 *.spec.ts
 *.spec.tsx
 __tests__
+!src/utils/subscriptionUrl.test.ts
 
 # Documentation
 README.md

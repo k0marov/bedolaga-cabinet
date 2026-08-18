@@ -6,7 +6,6 @@ interface ImportMetaEnv {
   readonly VITE_API_URL: string;
   readonly VITE_TELEGRAM_BOT_USERNAME?: string;
   readonly VITE_APP_NAME?: string;
-  readonly VITE_APP_LOGO?: string;
   /** Optional override for the backend liveness URL (defaults to `<origin>/health/unified`). */
   readonly VITE_HEALTH_URL?: string;
 }

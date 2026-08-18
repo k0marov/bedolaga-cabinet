@@ -29,7 +29,7 @@ import LegalFooter from '../components/LegalFooter';
 import LegalConsent from '../components/LegalConsent';
 import { infoApi } from '../api/info';
 import type { LegalConsentConfig } from '../types';
-import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 export default function Login() {
   const { t, i18n } = useTranslation();
@@ -224,7 +224,6 @@ export default function Login() {
   };
 
   const appName = branding?.name || import.meta.env.VITE_APP_NAME || BRAND_NAME;
-  const appLogo = branding?.logo_letter || import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
   const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
   const hasLogo = Boolean(logoUrl);
 
@@ -445,12 +444,6 @@ export default function Login() {
         {/* Logo & branding */}
         <div className="text-center">
           <div className="relative mx-auto mb-3 flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-dark-700/50 bg-dark-800/80 shadow-md">
-            {/* Letter fallback */}
-            <span
-              className={`absolute text-lg font-bold text-accent-400 transition-opacity duration-200 ${hasLogo && logoLoaded ? 'opacity-0' : 'opacity-100'}`}
-            >
-              {appLogo}
-            </span>
             {/* Logo image */}
             {hasLogo && (
               <img

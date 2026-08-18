@@ -9,11 +9,10 @@ import {
   preloadLogo,
   isLogoPreloaded,
 } from '@/api/branding';
-import { setFavicon, letterFaviconDataUri, roundedFaviconDataUri } from '@/utils/favicon';
-import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
+import { setFavicon, roundedFaviconDataUri } from '@/utils/favicon';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || BRAND_NAME;
-const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
 
 export function useBranding() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -35,7 +34,6 @@ export function useBranding() {
   });
 
   const appName = branding ? branding.name : FALLBACK_NAME;
-  const logoLetter = branding?.logo_letter || FALLBACK_LOGO;
   const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
   const hasCustomLogo = Boolean(logoUrl);
 
@@ -47,10 +45,6 @@ export function useBranding() {
   // Update favicon — custom logo (rounded like the header tile) when available,
   // else a brand-letter monogram so the tab always carries an icon.
   useEffect(() => {
-    if (!logoUrl) {
-      setFavicon(letterFaviconDataUri(logoLetter));
-      return;
-    }
     let cancelled = false;
     roundedFaviconDataUri(logoUrl).then((rounded) => {
       if (!cancelled) setFavicon(rounded || logoUrl);
@@ -58,7 +52,7 @@ export function useBranding() {
     return () => {
       cancelled = true;
     };
-  }, [logoUrl, logoLetter]);
+  }, [logoUrl]);
 
   // Fullscreen setting from server
   const { data: fullscreenSetting } = useQuery({
@@ -80,7 +74,6 @@ export function useBranding() {
 
   return {
     appName,
-    logoLetter,
     hasCustomLogo,
     logoUrl,
     isLogoPreloaded,

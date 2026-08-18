@@ -215,7 +215,7 @@
     "orSendCommand": "Or send the bot this command:",
     "commandCopied": "Command copied",
     "welcomeBack": "Welcome back!",
-    "loginTitle": "Login to Cabinet",
+    "loginTitle": "Login to Chayka VPN",
     "loginSubtitle": "Sign in with Telegram or use your email",
     "referralInvite": "You've been invited via referral link!",
     "passwordMismatch": "Passwords do not match",
@@ -949,7 +949,7 @@
     "title": "Referral Program",
     "yourLink": "Your Referral Links",
     "botLink": "Bot link",
-    "cabinetLink": "Cabinet link",
+    "cabinetLink": "Chayka VPN link",
     "copyLink": "Copy",
     "copied": "Copied!",
     "shareButton": "Share",
@@ -1009,7 +1009,7 @@
       "yourCampaigns": "Your campaigns",
       "campaignLinks": {
         "bot": "Bot link",
-        "web": "Cabinet link"
+        "web": "Chayka VPN link"
       },
       "campaignBonus": {
         "title": "Referral bonus",
@@ -1351,7 +1351,7 @@
       "subtitle": "System management",
       "statsUptime": "Uptime",
       "statsBot": "Bot",
-      "statsCabinet": "Cabinet",
+      "statsCabinet": "Chayka VPN",
       "statsTrials": "Trials",
       "statsPaid": "Paid",
       "statsOnline": "Online",
@@ -2309,11 +2309,11 @@
         "sys_logging": "Logging",
         "iface_info": "Legal documents",
         "iface_menu": "Menu button",
-        "sys_cabinet": "Cabinet",
+        "sys_cabinet": "Chayka VPN",
         "sys_other": "Other settings"
       },
       "categories": {
-        "CABINET": "Cabinet",
+        "CABINET": "Chayka VPN",
         "INFO_PAGES": "Legal documents and FAQ",
         "MENU": "Menu button",
         "TELEGRAM_WIDGET": "Telegram Login Widget",
@@ -2613,7 +2613,7 @@
       "settingsUpdateError": "Error saving settings",
       "copyTelegramId": "Click to copy Telegram ID",
       "viewUser": "Profile",
-      "cabinetNotifications": "Cabinet Notifications",
+      "cabinetNotifications": "Chayka VPN Notifications",
       "userNotificationsEnabled": "User Notifications",
       "userNotificationsEnabledDesc": "Send notifications to users about admin replies",
       "adminNotificationsEnabled": "Admin Notifications",
@@ -3755,14 +3755,14 @@
             "gift_sent": "Gift sent",
             "gift_received": "Gift received",
             "referral_earning": "Referral earning",
-            "cabinet_login": "Cabinet login",
+            "cabinet_login": "Chayka VPN login",
             "withdrawal": "Withdrawal request",
             "button_click": "Bot button",
-            "cabinet_action": "Cabinet action"
+            "cabinet_action": "Chayka VPN action"
           },
           "sources": {
             "bot": "Bot",
-            "cabinet": "Cabinet"
+            "cabinet": "Chayka VPN"
           },
           "subtypes": {
             "deposit": "Deposit",
@@ -4515,7 +4515,7 @@
     "title": "Updates",
     "subtitle": "Bot and cabinet release history",
     "bot": "Bot",
-    "cabinet": "Cabinet",
+    "cabinet": "Chayka VPN",
     "currentVersion": "Current version",
     "upToDate": "Up to date",
     "updateAvailable": "Update available",
@@ -4620,7 +4620,7 @@
     },
     "systemInfo": {
       "title": "System",
-      "cabinet": "Cabinet",
+      "cabinet": "Chayka VPN",
       "bot": "Bot",
       "python": "Python",
       "uptime": "Uptime",
@@ -5184,7 +5184,7 @@
     "copyLink": "Copy subscription link",
     "copied": "Copied!",
     "tryAgain": "Try again",
-    "backToCabinet": "Back to cabinet",
+    "backToCabinet": "Back to Chayka VPN",
     "errorTitle": "Error",
     "errorDesc": "Connection link is missing",
     "goToSubscription": "Go to subscription",
@@ -5344,7 +5344,7 @@
     "cabinetReady": "Your account is ready",
     "cabinetEmail": "Email",
     "cabinetPassword": "Password",
-    "goToCabinet": "Go to Cabinet",
+    "goToCabinet": "Go to Chayka VPN",
     "saveCredentials": "Save these login credentials",
     "credentialsSentToEmail": "Login credentials sent to your email",
     "giftSentSuccess": "Gift sent!",
@@ -5392,7 +5392,7 @@
     "daysSuffix": "d.",
     "validUntil": "Redeem before",
     "openBot": "Redeem in the bot",
-    "redeemCabinet": "Redeem in the cabinet",
+    "redeemCabinet": "Redeem in Chayka VPN",
     "redeeming": "Redeeming…",
     "needAuth": "Sign in to redeem the coupon in the cabinet — or open the link in the bot",
     "notFound": {

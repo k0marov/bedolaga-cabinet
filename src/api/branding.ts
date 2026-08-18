@@ -2,6 +2,7 @@ import apiClient from './client';
 import { isEndpointMissingError } from '../utils/api-error';
 import type { AnimationConfig } from '@/components/ui/backgrounds/types';
 import { DEFAULT_ANIMATION_CONFIG } from '@/components/ui/backgrounds/types';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 export type { AnimationConfig };
 
@@ -63,19 +64,16 @@ const LOGO_PRELOADED_KEY = 'cabinet_logo_preloaded';
 // In-memory blob URL cache to avoid exposing backend URL
 let _logoBlobUrl: string | null = null;
 
+const chaykaBranding = (_branding?: BrandingInfo | null): BrandingInfo => ({
+  name: BRAND_NAME,
+  logo_url: BRAND_LOGO_URL,
+  logo_letter: '',
+  has_custom_logo: true,
+});
+
 // Check if logo was already preloaded in this session
 export const isLogoPreloaded = (): boolean => {
-  try {
-    if (_logoBlobUrl) return true;
-    const cached = getCachedBranding();
-    if (!cached?.has_custom_logo || !cached?.logo_url) {
-      return false;
-    }
-    const preloaded = sessionStorage.getItem(LOGO_PRELOADED_KEY);
-    return preloaded === cached.logo_url;
-  } catch {
-    return false;
-  }
+  return true;
 };
 
 // Get cached branding from sessionStorage
@@ -83,14 +81,14 @@ export const getCachedBranding = (): BrandingInfo | null => {
   try {
     const cached = sessionStorage.getItem(BRANDING_CACHE_KEY);
     if (cached) {
-      return JSON.parse(cached);
+      return chaykaBranding(JSON.parse(cached));
     }
     // One-time migration: move stale localStorage value to sessionStorage
     const legacy = localStorage.getItem(BRANDING_CACHE_KEY);
     if (legacy) {
       localStorage.removeItem(BRANDING_CACHE_KEY);
       sessionStorage.setItem(BRANDING_CACHE_KEY, legacy);
-      return JSON.parse(legacy);
+      return chaykaBranding(JSON.parse(legacy));
     }
   } catch {
     // storage not available or invalid JSON
@@ -101,41 +99,14 @@ export const getCachedBranding = (): BrandingInfo | null => {
 // Update branding cache in sessionStorage
 export const setCachedBranding = (branding: BrandingInfo) => {
   try {
-    sessionStorage.setItem(BRANDING_CACHE_KEY, JSON.stringify(branding));
+    sessionStorage.setItem(BRANDING_CACHE_KEY, JSON.stringify(chaykaBranding(branding)));
   } catch {}
 };
 
 // Preload logo image as blob to hide backend URL
-export const preloadLogo = async (branding: BrandingInfo): Promise<void> => {
-  if (!branding.has_custom_logo || !branding.logo_url) {
-    return;
-  }
-
-  // Check if already preloaded in this session
-  if (_logoBlobUrl) {
-    return;
-  }
-
-  const preloaded = sessionStorage.getItem(LOGO_PRELOADED_KEY);
-  if (preloaded === branding.logo_url && _logoBlobUrl) {
-    return;
-  }
-
-  try {
-    const logoUrl = `${import.meta.env.VITE_API_URL || ''}${branding.logo_url}`;
-    const response = await fetch(logoUrl);
-    if (!response.ok) return;
-
-    const blob = await response.blob();
-    // Revoke previous blob URL if exists
-    if (_logoBlobUrl) {
-      URL.revokeObjectURL(_logoBlobUrl);
-    }
-    _logoBlobUrl = URL.createObjectURL(blob);
-    sessionStorage.setItem(LOGO_PRELOADED_KEY, branding.logo_url);
-  } catch {
-    // Fetch failed, logo will use letter fallback
-  }
+export const preloadLogo = async (_branding: BrandingInfo): Promise<void> => {
+  _logoBlobUrl = BRAND_LOGO_URL;
+  sessionStorage.setItem(LOGO_PRELOADED_KEY, BRAND_LOGO_URL);
 };
 
 // Get the blob URL for the logo (safe, doesn't expose backend)
@@ -143,10 +114,7 @@ export const getLogoBlobUrl = (): string | null => _logoBlobUrl;
 
 // Initialize logo preload from cache on page load
 export const initLogoPreload = () => {
-  const cached = getCachedBranding();
-  if (cached) {
-    preloadLogo(cached);
-  }
+  _logoBlobUrl = BRAND_LOGO_URL;
 };
 
 export interface BotStartVideoInfo {
@@ -158,13 +126,13 @@ export const brandingApi = {
   // Get current branding (public, no auth required)
   getBranding: async (): Promise<BrandingInfo> => {
     const response = await apiClient.get<BrandingInfo>('/cabinet/branding');
-    return response.data;
+    return chaykaBranding(response.data);
   },
 
   // Update project name (admin only)
   updateName: async (name: string): Promise<BrandingInfo> => {
     const response = await apiClient.put<BrandingInfo>('/cabinet/branding/name', { name });
-    return response.data;
+    return chaykaBranding(response.data);
   },
 
   // Upload custom logo (admin only)
@@ -178,7 +146,7 @@ export const brandingApi = {
       _logoBlobUrl = null;
     }
     sessionStorage.removeItem(LOGO_PRELOADED_KEY);
-    return response.data;
+    return chaykaBranding(response.data);
   },
 
   // ── Видео стартового меню бота ────────────────────────────────────────
@@ -212,12 +180,12 @@ export const brandingApi = {
       _logoBlobUrl = null;
     }
     sessionStorage.removeItem(LOGO_PRELOADED_KEY);
-    return response.data;
+    return chaykaBranding(response.data);
   },
 
   // Get logo URL as blob (hides backend URL from DOM)
   getLogoUrl: (_branding: BrandingInfo): string | null => {
-    return _logoBlobUrl;
+    return BRAND_LOGO_URL;
   },
 
   // Get animation enabled (public, no auth required)

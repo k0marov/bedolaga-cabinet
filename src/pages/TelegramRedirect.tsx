@@ -9,7 +9,7 @@ import { isInTelegramWebApp, getTelegramInitData } from '../hooks/useTelegramSDK
 import { tokenStorage } from '../utils/token';
 import { getSafeRedirectPath } from '../utils/safeRedirect';
 import { CheckIcon, XIcon, ExclamationIcon } from '@/components/icons';
-import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 const MAX_RETRY_ATTEMPTS = 3;
 const RETRY_COUNT_KEY = 'telegram_redirect_retry_count';
@@ -44,7 +44,6 @@ export default function TelegramRedirect() {
   });
 
   const appName = branding?.name || import.meta.env.VITE_APP_NAME || BRAND_NAME;
-  const logoLetter = branding?.logo_letter || import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
   const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
 
   // Get redirect target from URL params (validated)
@@ -138,11 +137,7 @@ export default function TelegramRedirect() {
       <div className="relative w-full max-w-sm text-center">
         {/* Logo */}
         <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg shadow-accent-500/30">
-          {logoUrl ? (
-            <img src={logoUrl} alt={appName} className="h-full w-full object-cover" />
-          ) : (
-            <span className="text-3xl font-bold text-white">{logoLetter}</span>
-          )}
+          <img src={logoUrl} alt={appName} className="h-full w-full object-cover" />
         </div>
 
         <h1 className="mb-2 text-2xl font-bold text-dark-50">{appName}</h1>
