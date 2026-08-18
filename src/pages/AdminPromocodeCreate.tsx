@@ -143,7 +143,8 @@ export default function AdminPromocodeCreate() {
       : mode;
 
   const handleSubmit = () => {
-    // For discount: balance_bonus_kopeks = percent (integer), subscription_days = hours
+    // For discount: balance_bonus_kopeks = percent (integer). A validity period
+    // only applies to a first-purchase-only discount; otherwise it is lifetime.
     // For balance: balance_bonus_kopeks = rubles * 100
     const balanceValue = balanceBonusRubles === '' ? 0 : balanceBonusRubles;
     const daysValue = subscriptionDays === '' ? 0 : subscriptionDays;
@@ -159,7 +160,7 @@ export default function AdminPromocodeCreate() {
             ? Math.round(balanceValue * 100) // rubles to kopeks
             : 0,
       subscription_days:
-        mode === 'discount' ||
+        (mode === 'discount' && firstPurchaseOnly) ||
         mode === 'trial_subscription' ||
         (mode === 'bonus_set' && includeDays)
           ? daysValue
@@ -217,9 +218,8 @@ export default function AdminPromocodeCreate() {
     if (balanceValue <= 0 || balanceValue > 100) {
       validationErrors.push('discountPercentInvalid');
     }
-    // 0 часов = «бессрочно до первой покупки» — разрешено (как в isValid до
-    // унификации; раньше isValid и список ошибок противоречили друг другу)
-    if (daysValue < 0) {
+    // For a lifetime discount the duration is intentionally ignored.
+    if (firstPurchaseOnly && daysValue < 0) {
       validationErrors.push('discountHoursRequired');
     }
   }
@@ -476,37 +476,39 @@ export default function AdminPromocodeCreate() {
                 {t('admin.promocodes.form.discountHint')}
               </p>
             </div>
-            <div>
-              <label
-                htmlFor="pc-discount-validity"
-                className="mb-2 block text-sm font-medium text-dark-300"
-              >
-                {t('admin.promocodes.form.validityPeriod')}
-                <span className="text-error-400">*</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  id="pc-discount-validity"
-                  type="number"
-                  value={subscriptionDays}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val === '') {
-                      setSubscriptionDays('');
-                    } else {
-                      setSubscriptionDays(Math.max(0, parseInt(val) || 0));
-                    }
-                  }}
-                  className="input w-32"
-                  min={0}
-                  placeholder="0"
-                />
-                <span className="text-dark-400">{t('admin.promocodes.form.hours')}</span>
+            {firstPurchaseOnly && (
+              <div>
+                <label
+                  htmlFor="pc-discount-validity"
+                  className="mb-2 block text-sm font-medium text-dark-300"
+                >
+                  {t('admin.promocodes.form.validityPeriod')}
+                  <span className="text-error-400">*</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    id="pc-discount-validity"
+                    type="number"
+                    value={subscriptionDays}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setSubscriptionDays('');
+                      } else {
+                        setSubscriptionDays(Math.max(0, parseInt(val) || 0));
+                      }
+                    }}
+                    className="input w-32"
+                    min={0}
+                    placeholder="0"
+                  />
+                  <span className="text-dark-400">{t('admin.promocodes.form.hours')}</span>
+                </div>
+                <p className="mt-1 text-xs text-dark-500">
+                  {t('admin.promocodes.form.validityHint')}
+                </p>
               </div>
-              <p className="mt-1 text-xs text-dark-500">
-                {t('admin.promocodes.form.validityHint')}
-              </p>
-            </div>
+            )}
           </>
         )}
 
