@@ -18,6 +18,7 @@ import {
 } from '@/api/branding';
 import { themeColorsApi } from '@/api/themeColors';
 import { cn } from '@/lib/utils';
+import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import TicketNotificationBell from '@/components/TicketNotificationBell';
@@ -44,8 +45,8 @@ import {
   SearchIcon,
 } from './icons';
 
-const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || 'Cabinet';
-const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || 'V';
+const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || BRAND_NAME;
+const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
 
 import type { TelegramPlatform } from '@/hooks/useTelegramSDK';
 
@@ -108,8 +109,8 @@ export function AppHeader({
 
   const appName = branding ? branding.name : FALLBACK_NAME;
   const logoLetter = branding?.logo_letter || FALLBACK_LOGO;
-  const hasCustomLogo = branding?.has_custom_logo || false;
-  const logoUrl = branding ? brandingApi.getLogoUrl(branding) : null;
+  const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
+  const hasCustomLogo = Boolean(logoUrl);
 
   // Theme toggle visibility
   const { data: enabledThemes } = useQuery({

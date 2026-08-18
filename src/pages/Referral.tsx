@@ -9,6 +9,7 @@ import { brandingApi } from '../api/branding';
 import { partnerApi } from '../api/partners';
 import { withdrawalApi } from '../api/withdrawals';
 import { CampaignCard } from '../components/partner/CampaignCard';
+import { BRAND_NAME } from '@/config/brand';
 import { useCurrency } from '../hooks/useCurrency';
 import { StatCard } from '@/components/stats';
 import {
@@ -194,7 +195,7 @@ export default function Referral() {
     if (!referralLink) return;
     const shareText = t('referral.shareMessage', {
       percent: info?.commission_percent || 0,
-      botName: branding?.name || import.meta.env.VITE_APP_NAME || 'Cabinet',
+      botName: branding?.name || import.meta.env.VITE_APP_NAME || BRAND_NAME,
     });
 
     if (navigator.share) {

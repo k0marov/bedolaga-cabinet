@@ -24,6 +24,7 @@ import { Button } from '@/components/primitives/Button';
 import { Switch } from '@/components/primitives/Switch';
 import { staggerContainer, staggerItem } from '@/components/motion/transitions';
 import { CopyIcon, CheckIcon, ShareIcon, ArrowRightIcon, PencilIcon } from '@/components/icons';
+import { BRAND_NAME } from '@/config/brand';
 
 export default function Profile() {
   const { t } = useTranslation();
@@ -89,7 +90,7 @@ export default function Profile() {
     if (!referralLink) return;
     const shareText = t('referral.shareMessage', {
       percent: referralInfo?.commission_percent || 0,
-      botName: branding?.name || import.meta.env.VITE_APP_NAME || 'Cabinet',
+      botName: branding?.name || import.meta.env.VITE_APP_NAME || BRAND_NAME,
     });
 
     if (navigator.share) {

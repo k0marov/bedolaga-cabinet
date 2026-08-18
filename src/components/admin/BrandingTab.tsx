@@ -6,6 +6,7 @@ import { setCachedFullscreenEnabled } from '../../hooks/useTelegramSDK';
 import { UploadIcon, TrashIcon, PencilIcon, CheckIcon, CloseIcon } from './icons';
 import { Toggle } from './Toggle';
 import { BackgroundEditor } from './BackgroundEditor';
+import { BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 interface BrandingTabProps {
   accentColor?: string;
@@ -162,7 +163,12 @@ export function BrandingTab({ accentColor = '#3b82f6' }: BrandingTabProps) {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                branding?.logo_letter || 'V'
+                <img
+                  src={BRAND_LOGO_URL}
+                  alt={BRAND_NAME}
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
               )}
             </div>
 
@@ -224,11 +230,11 @@ export function BrandingTab({ accentColor = '#3b82f6' }: BrandingTabProps) {
             ) : (
               <div className="flex min-w-0 items-center gap-2">
                 <span className="min-w-0 truncate text-lg text-dark-100">
-                  {branding?.name || t('admin.settings.notSpecified')}
+                  {branding?.name || BRAND_NAME}
                 </span>
                 <button
                   onClick={() => {
-                    setNewName(branding?.name ?? '');
+                    setNewName(branding?.name ?? BRAND_NAME);
                     setEditingName(true);
                   }}
                   className="shrink-0 rounded-lg p-1.5 text-dark-400 transition-colors hover:bg-dark-700 hover:text-dark-200"

@@ -10,9 +10,10 @@ import {
   isLogoPreloaded,
 } from '@/api/branding';
 import { setFavicon, letterFaviconDataUri, roundedFaviconDataUri } from '@/utils/favicon';
+import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
-const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || 'Cabinet';
-const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || 'V';
+const FALLBACK_NAME = import.meta.env.VITE_APP_NAME || BRAND_NAME;
+const FALLBACK_LOGO = import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
 
 export function useBranding() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -35,12 +36,12 @@ export function useBranding() {
 
   const appName = branding ? branding.name : FALLBACK_NAME;
   const logoLetter = branding?.logo_letter || FALLBACK_LOGO;
-  const hasCustomLogo = branding?.has_custom_logo || false;
-  const logoUrl = branding ? brandingApi.getLogoUrl(branding) : null;
+  const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
+  const hasCustomLogo = Boolean(logoUrl);
 
   // Set document title
   useEffect(() => {
-    document.title = appName || 'VPN';
+    document.title = appName || BRAND_NAME;
   }, [appName]);
 
   // Update favicon — custom logo (rounded like the header tile) when available,

@@ -12,6 +12,7 @@ import {
   ExternalLinkIcon,
   LinkIcon,
 } from '@/components/icons';
+import { BRAND_LOGO_LETTER, BRAND_LOGO_URL, BRAND_NAME } from '@/config/brand';
 
 type Status = 'countdown' | 'fallback' | 'error';
 
@@ -67,9 +68,9 @@ export default function DeepLinkRedirect() {
     staleTime: 60000,
   });
 
-  const projectName = branding ? branding.name : import.meta.env.VITE_APP_NAME || 'VPN';
-  const logoLetter = branding?.logo_letter || import.meta.env.VITE_APP_LOGO || 'V';
-  const logoUrl = branding ? brandingApi.getLogoUrl(branding) : null;
+  const projectName = branding?.name || import.meta.env.VITE_APP_NAME || BRAND_NAME;
+  const logoLetter = branding?.logo_letter || import.meta.env.VITE_APP_LOGO || BRAND_LOGO_LETTER;
+  const logoUrl = (branding ? brandingApi.getLogoUrl(branding) : null) || BRAND_LOGO_URL;
 
   // Parse raw query string to preserve '+' chars in base64 crypto links.
   // URLSearchParams decodes '+' as space, breaking ss://, vless:// etc.
@@ -170,14 +171,14 @@ export default function DeepLinkRedirect() {
       <div className="relative w-full max-w-sm text-center">
         {/* Logo with pulse animation */}
         <div className="mx-auto mb-6 flex h-20 w-20 animate-pulse items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-accent-400 to-accent-600 shadow-lg shadow-accent-500/30">
-          {branding?.has_custom_logo && logoUrl ? (
+          {logoUrl ? (
             <img src={logoUrl} alt={projectName || 'Logo'} className="h-full w-full object-cover" />
           ) : (
             <span className="text-3xl font-bold text-white">{logoLetter}</span>
           )}
         </div>
 
-        <h1 className="mb-1 text-2xl font-bold text-dark-50">{projectName || 'VPN'}</h1>
+        <h1 className="mb-1 text-2xl font-bold text-dark-50">{projectName || BRAND_NAME}</h1>
 
         {status !== 'error' && (
           <p className="mb-6 text-dark-400">

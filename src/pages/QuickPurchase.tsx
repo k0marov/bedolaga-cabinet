@@ -804,7 +804,7 @@ export default function QuickPurchase() {
 
   useEffect(() => {
     if (!branding) return;
-    const logoUrl = branding.has_custom_logo ? getLogoBlobUrl() : null;
+    const logoUrl = (branding.has_custom_logo ? getLogoBlobUrl() : null) || '/chayka-logo.svg';
     if (!logoUrl) {
       setFavicon(letterFaviconDataUri(branding.logo_letter));
       return;
