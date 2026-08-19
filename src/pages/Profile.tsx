@@ -18,6 +18,7 @@ import {
 } from '../api/notifications';
 import { referralApi } from '../api/referral';
 import { brandingApi, type EmailAuthEnabled } from '../api/branding';
+import { REFERRALS_ENABLED } from '../hooks/useFeatureFlags';
 import { UI } from '../config/constants';
 import { Card } from '@/components/data-display/Card';
 import { Button } from '@/components/primitives/Button';
@@ -47,15 +48,17 @@ export default function Profile() {
   const newEmailInputRef = useRef<HTMLInputElement>(null);
   const codeInputRef = useRef<HTMLInputElement>(null);
 
-  // Referral data
+  // Referral data — skipped entirely at build time when feature flag is off
   const { data: referralInfo } = useQuery({
     queryKey: ['referral-info'],
     queryFn: referralApi.getReferralInfo,
+    enabled: REFERRALS_ENABLED,
   });
 
   const { data: referralTerms } = useQuery({
     queryKey: ['referral-terms'],
     queryFn: referralApi.getReferralTerms,
+    enabled: REFERRALS_ENABLED,
   });
 
   const { data: branding } = useQuery({
@@ -329,8 +332,9 @@ export default function Profile() {
 
       {/* Referral Link Widget — self-animated: mounts after the referral queries
           resolve, when the parent stagger orchestration has already finished and
-          would leave it stuck at opacity 0 */}
-      {referralTerms?.is_enabled && referralLink && (
+          would leave it stuck at opacity 0. Also stripped at build time via
+          REFERRALS_ENABLED flag. */}
+      {REFERRALS_ENABLED && referralTerms?.is_enabled && referralLink && (
         <motion.div variants={staggerItem} initial="initial" animate="animate">
           <Card>
             <div className="mb-4 flex items-center justify-between">

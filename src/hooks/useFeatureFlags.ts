@@ -7,6 +7,15 @@ import { wheelApi } from '@/api/wheel';
 import { contestsApi } from '@/api/contests';
 import { pollsApi } from '@/api/polls';
 
+// Build-time feature flag — evaluated during `vite build` and baked into
+// the JS bundle. When false, the referral UI surfaces are stripped at
+// the source level (tree-shakable boolean literal), so they don't even
+// appear in the final bundle. Defaults to false (disabled out of the box).
+export const REFERRALS_ENABLED: boolean =
+  import.meta.env.VITE_REFERRALS_ENABLED === undefined
+    ? false
+    : import.meta.env.VITE_REFERRALS_ENABLED === 'true';
+
 // Последние известные значения флагов. Пока запросы в полёте, флаги были
 // undefined -> табы «Рефералы»/«Колесо» появлялись с задержкой и нижняя
 // навигация прыгала на каждом холодном старте. Кэш убирает layout shift;
@@ -36,7 +45,9 @@ export function useFeatureFlags() {
   const { data: referralTerms } = useQuery({
     queryKey: ['referral-terms'],
     queryFn: referralApi.getReferralTerms,
-    enabled: isAuthenticated,
+    // Skip the API call entirely when the build-time flag is off — the
+    // runtime value is hardcoded to false below anyway.
+    enabled: REFERRALS_ENABLED && isAuthenticated,
     staleTime: 60000,
     retry: false,
   });
@@ -74,7 +85,11 @@ export function useFeatureFlags() {
   });
 
   const flags = {
-    referralEnabled: referralTerms ? referralTerms.is_enabled : cached.referralEnabled,
+    referralEnabled: REFERRALS_ENABLED
+      ? referralTerms
+        ? referralTerms.is_enabled
+        : cached.referralEnabled
+      : false,
     wheelEnabled: wheelConfig ? wheelConfig.is_enabled : cached.wheelEnabled,
     hasContests: contestsCount ? contestsCount.count > 0 : cached.hasContests,
     hasPolls: pollsCount ? pollsCount.count > 0 : cached.hasPolls,

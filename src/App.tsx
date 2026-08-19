@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ComponentType } from 'react';
 import { Routes, Route, Navigate, useLocation, useParams } from 'react-router';
 import { useAuthStore } from './store/auth';
+import { REFERRALS_ENABLED } from './hooks/useFeatureFlags';
 
 /**
  * Wrapper around React.lazy that auto-reloads the page when a chunk fails to load
@@ -449,36 +450,50 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/referral"
-          element={
-            <ProtectedRoute>
-              <LazyPage>
-                <Referral />
-              </LazyPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/referral/partner/apply"
-          element={
-            <ProtectedRoute>
-              <LazyPage>
-                <ReferralPartnerApply />
-              </LazyPage>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/referral/withdrawal/request"
-          element={
-            <ProtectedRoute>
-              <LazyPage>
-                <ReferralWithdrawalRequest />
-              </LazyPage>
-            </ProtectedRoute>
-          }
-        />
+        {/* Referral routes. Build-time tree-shaken when REFERRALS_ENABLED is false. */}
+        {REFERRALS_ENABLED ? (
+          <>
+            <Route
+              path="/referral"
+              element={
+                <ProtectedRoute>
+                  <LazyPage>
+                    <Referral />
+                  </LazyPage>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/referral/partner/apply"
+              element={
+                <ProtectedRoute>
+                  <LazyPage>
+                    <ReferralPartnerApply />
+                  </LazyPage>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/referral/withdrawal/request"
+              element={
+                <ProtectedRoute>
+                  <LazyPage>
+                    <ReferralWithdrawalRequest />
+                  </LazyPage>
+                </ProtectedRoute>
+              }
+            />
+          </>
+        ) : (
+          <Route
+            path="/referral/*"
+            element={
+              <ProtectedRoute>
+                <Navigate to="/" replace />
+              </ProtectedRoute>
+            }
+          />
+        )}
         <Route
           path="/support"
           element={
