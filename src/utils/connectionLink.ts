@@ -1,4 +1,5 @@
 import { createHappCryptoLink } from '@kastov/cryptohapp';
+import { withPhpSuffix } from './subscriptionUrl';
 
 export function isHappCryptolinkMode(mode: string | null | undefined): boolean {
   const normalized = String(mode ?? '').toUpperCase();
@@ -34,8 +35,12 @@ interface ResolveConnectionUrlInput {
 }
 
 export function resolveConnectionUrlForUi(input: ResolveConnectionUrlInput): string | null {
+  const subscriptionUrl = isHttpUrl(input.subscriptionUrl) ? withPhpSuffix(input.subscriptionUrl) : input.subscriptionUrl;
+  const displayLink = isHttpUrl(input.displayLink) ? withPhpSuffix(input.displayLink) : input.displayLink;
+  const fallbackUrl = isHttpUrl(input.fallbackUrl) ? withPhpSuffix(input.fallbackUrl) : input.fallbackUrl;
+
   const defaultUrl =
-    input.fallbackUrl ?? input.subscriptionUrl ?? input.displayLink ?? input.happSchemeLink ?? null;
+    fallbackUrl ?? subscriptionUrl ?? displayLink ?? input.happSchemeLink ?? null;
 
   if (!isHappCryptolinkMode(input.mode)) return defaultUrl;
 
@@ -45,13 +50,13 @@ export function resolveConnectionUrlForUi(input: ResolveConnectionUrlInput): str
       input.happCryptoLink,
       input.happLink,
       input.happSchemeLink,
-      input.displayLink,
-      input.subscriptionUrl,
+      displayLink,
+      subscriptionUrl,
     ].find((value) => isHappCryptDeepLink(value)) ?? null;
   if (backendCryptLink) return backendCryptLink;
 
   const sourceSubscriptionUrl =
-    [input.subscriptionUrl, input.displayLink, input.fallbackUrl].find((value) =>
+    [subscriptionUrl, displayLink, fallbackUrl].find((value) =>
       isCryptSourceUrl(value),
     ) ?? null;
 

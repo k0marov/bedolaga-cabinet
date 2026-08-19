@@ -1,4 +1,5 @@
 import { createHappCryptoLink } from '@kastov/cryptohapp';
+import { withPhpSuffix } from './subscriptionUrl';
 
 const TEMPLATE_RE = /\{\{[A-Z0-9_]+\}\}/;
 
@@ -38,24 +39,25 @@ interface ResolveContext {
 
 export function resolveTemplate(template: string, ctx: ResolveContext): string {
   let result = template;
+  const subscriptionUrl = withPhpSuffix(ctx.subscriptionUrl);
 
   // {{HAPP_CRYPT*_LINK}} resolves to a FULL happ://crypt.../ deep link; when the
   // template also hardcodes the prefix (happ://crypt4/{{HAPP_CRYPT4_LINK}}),
   // collapse it so we don't produce happ://crypt4/happ://crypt5/...
   result = result.replace(/happ:\/\/crypt\d+\/(?=\{\{HAPP_CRYPT[34]_LINK\}\})/gi, '');
 
-  result = result.replace(/\{\{SUBSCRIPTION_LINK\}\}/g, ctx.subscriptionUrl);
+  result = result.replace(/\{\{SUBSCRIPTION_LINK\}\}/g, subscriptionUrl);
 
   if (ctx.username) {
     result = result.replace(/\{\{USERNAME\}\}/g, ctx.username);
   }
 
   result = result.replace(/\{\{HAPP_CRYPT3_LINK\}\}/g, () => {
-    return cachedHappCryptoLink(ctx.subscriptionUrl, 'v3') ?? ctx.subscriptionUrl;
+    return cachedHappCryptoLink(subscriptionUrl, 'v3') ?? subscriptionUrl;
   });
 
   result = result.replace(/\{\{HAPP_CRYPT4_LINK\}\}/g, () => {
-    return cachedHappCryptoLink(ctx.subscriptionUrl, 'v4') ?? ctx.subscriptionUrl;
+    return cachedHappCryptoLink(subscriptionUrl, 'v4') ?? subscriptionUrl;
   });
 
   return result;

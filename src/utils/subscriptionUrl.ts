@@ -1,4 +1,21 @@
-const SUBSCRIPTION_URL_KEYS = new Set(['subscription_url', 'subscriptionUrl']);
+const SUBSCRIPTION_URL_KEYS = new Set([
+  'subscription_url',
+  'subscriptionUrl',
+  'subscription_crypto_link',
+  'subscriptionCryptoLink',
+  'display_link',
+  'displayLink',
+  'happ_redirect_link',
+  'happRedirectLink',
+  'happ_scheme_link',
+  'happSchemeLink',
+  'happ_crypto_link',
+  'happCryptoLink',
+  'happ_cryptolink',
+  'happCryptolink',
+  'happ_link',
+  'happLink',
+]);
 
 /**
  * Append the required .php suffix to a subscription URL exactly once.

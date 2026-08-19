@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { brandingApi } from '../api/branding';
 import { copyToClipboard } from '../utils/clipboard';
 import { openAppScheme } from '../utils/openAppScheme';
+import { withPhpSuffix } from '../utils/subscriptionUrl';
 import {
   CheckIcon,
   CopyIcon,
@@ -88,7 +89,8 @@ export default function DeepLinkRedirect() {
 
   // Get parameters
   const deepLink = getRawParam('url') || getRawParam('deeplink') || '';
-  const subscriptionUrl = getRawParam('sub') || '';
+  const subscriptionUrlRaw = getRawParam('sub') || '';
+  const subscriptionUrl = subscriptionUrlRaw ? withPhpSuffix(subscriptionUrlRaw) : '';
   const appParam = searchParams.get('app') || '';
 
   // Detect app from deep link
